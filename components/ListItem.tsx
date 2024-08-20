@@ -3,9 +3,10 @@ import { theme } from "../theme";
 
 type Props = {
   itemName: string;
+  isCompleted: boolean;
 };
 
-export const ListItem = ({ itemName }: Props) => {
+export const ListItem = ({ itemName, isCompleted }: Props) => {
   const handleDelete = () => {
     Alert.alert(`Are you sure you want to delete ${itemName}?`, "", [
       {
@@ -21,10 +22,25 @@ export const ListItem = ({ itemName }: Props) => {
   };
 
   return (
-    <View style={styles.itemContainer}>
-      <Text style={styles.itemText}>{itemName}</Text>
+    <View
+      style={[
+        styles.itemContainer,
+        isCompleted ? styles.completedContainer : undefined,
+      ]}
+    >
+      <Text
+        style={[
+          styles.itemText,
+          isCompleted ? styles.completedText : undefined,
+        ]}
+      >
+        {itemName}
+      </Text>
       <TouchableOpacity
-        style={styles.button}
+        style={[
+          styles.button,
+          isCompleted ? styles.completedButton : undefined,
+        ]}
         onPress={handleDelete}
         activeOpacity={0.9}
       >
@@ -38,7 +54,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     alignItems: "center",
     borderBottomWidth: 1,
-    borderBottomColor: "#1a759f",
+    borderBottomColor: theme.colorCerulean,
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 20,
@@ -51,13 +67,23 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: theme.colorBlack,
     borderRadius: 8,
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
   },
   buttonText: {
     color: theme.colorWhite,
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "700",
     letterSpacing: 1,
+  },
+  completedContainer: {
+    backgroundColor: theme.colorDarkGrey,
+    borderBottomColor: theme.colorGrey,
+  },
+  completedButton: {
+    backgroundColor: theme.colorGrey,
+  },
+  completedText: {
+    textDecorationLine: "line-through",
   },
 });

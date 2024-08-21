@@ -26,7 +26,7 @@ export const ListItem = ({ itemName, isCompleted }: Props) => {
     <FontAwesome6
       name="circle-xmark"
       size={20}
-      color={isCompleted ? theme.colorGrey : theme.colorRed}
+      color={isCompleted ? theme.colorDarkGrey : theme.colorRed}
       solid
     />
   );
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     alignItems: "center",
     borderBottomWidth: 1,
-    borderBottomColor: theme.colorCerulean,
+    borderBottomColor: theme.colorDarkGrey,
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 20,
@@ -65,13 +65,15 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 20,
+    letterSpacing: 1,
     fontWeight: "200",
   },
   completedContainer: {
-    backgroundColor: theme.colorDarkGrey,
-    borderBottomColor: theme.colorGrey,
+    backgroundColor: theme.colorGrey,
+    borderBottomColor: theme.colorDarkGrey,
   },
   completedText: {
     textDecorationLine: "line-through",
+    color: theme.colorDarkGrey,
   },
 });

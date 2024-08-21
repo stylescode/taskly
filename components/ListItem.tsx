@@ -1,7 +1,6 @@
 import { Alert, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { theme } from "../theme";
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import { reloadAppAsync } from "expo";
+import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
 type Props = {
   itemName: string;

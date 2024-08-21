@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 
-import { ListItem } from "./components/ListItem";
+import { ListItem } from "../components/ListItem";
 
 export default function App() {
   return (

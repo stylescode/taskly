@@ -4,4 +4,5 @@ export const theme = {
   colorBlack: "#000",
   colorGrey: "grey",
   colorDarkGrey: "darkgrey",
+  colorRed: "red",
 };

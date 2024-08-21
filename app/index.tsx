@@ -1,6 +1,5 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, TextInput, View } from "react-native";
-import { Link } from "expo-router";
 import { ListItem } from "../components/ListItem";
 import { theme } from "../theme";
 import { useState } from "react";

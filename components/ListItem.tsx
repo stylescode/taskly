@@ -1,5 +1,7 @@
 import { Alert, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { theme } from "../theme";
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import { reloadAppAsync } from "expo";
 
 type Props = {
   itemName: string;
@@ -21,6 +23,15 @@ export const ListItem = ({ itemName, isCompleted }: Props) => {
     ]);
   };
 
+  const DeleteBtn = (
+    <FontAwesome6
+      name="circle-xmark"
+      size={20}
+      color={isCompleted ? theme.colorGrey : theme.colorRed}
+      solid
+    />
+  );
+
   return (
     <View
       style={[
@@ -36,15 +47,8 @@ export const ListItem = ({ itemName, isCompleted }: Props) => {
       >
         {itemName}
       </Text>
-      <TouchableOpacity
-        style={[
-          styles.button,
-          isCompleted ? styles.completedButton : undefined,
-        ]}
-        onPress={handleDelete}
-        activeOpacity={0.9}
-      >
-        <Text style={styles.buttonText}>DELETE</Text>
+      <TouchableOpacity onPress={handleDelete} activeOpacity={0.9}>
+        {DeleteBtn}
       </TouchableOpacity>
     </View>
   );
@@ -64,24 +68,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "200",
   },
-  button: {
-    backgroundColor: theme.colorBlack,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-  },
-  buttonText: {
-    color: theme.colorWhite,
-    fontSize: 12,
-    fontWeight: "700",
-    letterSpacing: 1,
-  },
   completedContainer: {
     backgroundColor: theme.colorDarkGrey,
     borderBottomColor: theme.colorGrey,
-  },
-  completedButton: {
-    backgroundColor: theme.colorGrey,
   },
   completedText: {
     textDecorationLine: "line-through",

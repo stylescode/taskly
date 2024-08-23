@@ -23,6 +23,7 @@ export default function Layout() {
         name="counter"
         options={{
           title: "Counter",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="plus" size={size} color={color} />
           ),

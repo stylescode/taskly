@@ -44,7 +44,11 @@ export default function App() {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+      stickyHeaderIndices={[0]}
+    >
       <TextInput
         style={styles.textInput}
         placeholder="E.g. Coffee"
@@ -71,7 +75,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingTop: 20,
   },
+  contentContainer: {
+    paddingBottom: 20,
+  },
   textInput: {
+    backgroundColor: theme.colorWhite,
     borderColor: theme.colorGrey,
     borderRadius: 10,
     borderWidth: 1,

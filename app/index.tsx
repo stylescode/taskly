@@ -25,8 +25,19 @@ export default function App() {
     }
   };
 
-  const deleteItem = (id: string) => {
+  const handleDelete = (id: string) => {
     const newShoppingList = shoppingList.filter((item) => item.id !== id);
+    setShoppingList(newShoppingList);
+  };
+
+  const handleToggleComplete = (id: string) => {
+    const newShoppingList = shoppingList.map((item) => {
+      if (item.id === id) {
+        return { ...item, isCompleted: !item.isCompleted };
+      } else {
+        return item;
+      }
+    });
     setShoppingList(newShoppingList);
   };
 
@@ -55,7 +66,8 @@ export default function App() {
           <ListItem
             itemName={item.itemName}
             isCompleted={item.isCompleted}
-            onDelete={() => deleteItem(item.id)}
+            deleteItem={() => handleDelete(item.id)}
+            toggleComplete={() => handleToggleComplete(item.id)}
           />
         );
       }}

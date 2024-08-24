@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View, ScrollView } from "react-native";
 import { ListItem } from "../components/ListItem";
 import { theme } from "../theme";
 import { useState } from "react";
@@ -44,7 +44,7 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <TextInput
         style={styles.textInput}
         placeholder="E.g. Coffee"
@@ -61,7 +61,7 @@ export default function App() {
         />
       ))}
       <StatusBar style="auto" />
-    </View>
+    </ScrollView>
   );
 }
 

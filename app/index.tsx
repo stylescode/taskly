@@ -5,7 +5,7 @@ import { theme } from "../theme";
 import { useState } from "react";
 
 type ShoppingListItemType = {
-  id: string;
+  id: number;
   itemName: string;
   isCompleted: boolean;
 };
@@ -18,19 +18,19 @@ export default function App() {
     if (newItem.length > 0) {
       const newShoppingList = [
         ...shoppingList,
-        { id: Date.now().toString(), itemName: newItem, isCompleted: false },
+        { id: Date.now(), itemName: newItem, isCompleted: false },
       ];
       setShoppingList(newShoppingList);
       setNewItem("");
     }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     const newShoppingList = shoppingList.filter((item) => item.id !== id);
     setShoppingList(newShoppingList);
   };
 
-  const handleToggleComplete = (id: string) => {
+  const handleToggleComplete = (id: number) => {
     const newShoppingList = shoppingList.map((item) => {
       if (item.id === id) {
         return { ...item, isCompleted: !item.isCompleted };
@@ -39,6 +39,12 @@ export default function App() {
       }
     });
     setShoppingList(newShoppingList);
+  };
+
+  const sortList = (list: ShoppingListItemType[]) => {
+    return list.sort((a, b) => {
+      return a.isCompleted === b.isCompleted ? 0 : a.isCompleted ? 1 : -1;
+    });
   };
 
   return (
@@ -60,7 +66,7 @@ export default function App() {
           onSubmitEditing={handleAddItem}
         />
       }
-      data={shoppingList}
+      data={sortList(shoppingList)}
       renderItem={({ item }) => {
         return (
           <ListItem

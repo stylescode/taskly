@@ -38,7 +38,7 @@ export const ListItem = ({ itemName, isCompleted, deleteItem, toggleComplete }: 
   );
 
   const doneIcon = (
-    <FontAwesome6 name="circle" size={20} color={theme.colorCerulean} solid />
+    <FontAwesome6 name="check" size={20} color={theme.colorDarkGrey} solid />
   );
 
   return (
@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     fontWeight: "200",
     flex: 1,
+    paddingRight: 10,
   },
   completedContainer: {
     backgroundColor: theme.colorGrey,

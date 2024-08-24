@@ -5,9 +5,10 @@ import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 type Props = {
   itemName: string;
   isCompleted: boolean;
+  onDelete: () => void;
 };
 
-export const ListItem = ({ itemName, isCompleted }: Props) => {
+export const ListItem = ({ itemName, isCompleted, onDelete }: Props) => {
   const handleDelete = () => {
     Alert.alert(`Are you sure you want to delete ${itemName}?`, "", [
       {
@@ -17,7 +18,7 @@ export const ListItem = ({ itemName, isCompleted }: Props) => {
       {
         text: "Delete",
         style: "destructive",
-        onPress: () => console.log("Item deleted"),
+        onPress: () => onDelete(),
       },
     ]);
   };

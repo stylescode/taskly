@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, TextInput, View, ScrollView, FlatList } from "react-native";
+import { StyleSheet, Text, TextInput, View, FlatList } from "react-native";
 import { ListItem } from "../components/ListItem";
 import { theme } from "../theme";
 import { useState } from "react";
@@ -25,6 +25,11 @@ export default function App() {
     }
   };
 
+  const deleteItem = (id: string) => {
+    const newShoppingList = shoppingList.filter((item) => item.id !== id);
+    setShoppingList(newShoppingList);
+  };
+
   return (
     <FlatList
       style={styles.container}
@@ -47,7 +52,11 @@ export default function App() {
       data={shoppingList}
       renderItem={({ item }) => {
         return (
-          <ListItem itemName={item.itemName} isCompleted={item.isCompleted} />
+          <ListItem
+            itemName={item.itemName}
+            isCompleted={item.isCompleted}
+            onDelete={() => deleteItem(item.id)}
+          />
         );
       }}
       stickyHeaderIndices={[0]}

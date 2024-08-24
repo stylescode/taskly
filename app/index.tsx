@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, TextInput, View, ScrollView } from "react-native";
+import { StyleSheet, Text, TextInput, View, ScrollView, FlatList } from "react-native";
 import { ListItem } from "../components/ListItem";
 import { theme } from "../theme";
 import { useState } from "react";
@@ -10,27 +10,9 @@ type ShoppingListItemType = {
   isCompleted: boolean;
 };
 
-const initialItems: ShoppingListItemType[] = [
-  {
-    id: "1",
-    itemName: "TEA",
-    isCompleted: false,
-  },
-  {
-    id: "2",
-    itemName: "SUGAR",
-    isCompleted: true,
-  },
-  {
-    id: "3",
-    itemName: "CHOCOLATE",
-    isCompleted: false,
-  },
-];
-
 export default function App() {
   const [newItem, setNewItem] = useState("");
-  const [shoppingList, setShoppingList] = useState(initialItems);
+  const [shoppingList, setShoppingList] = useState<ShoppingListItemType[]>([]);
 
   const handleAddItem = () => {
     if (newItem.length > 0) {
@@ -44,28 +26,32 @@ export default function App() {
   };
 
   return (
-    <ScrollView
+    <FlatList
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
-      stickyHeaderIndices={[0]}
-    >
-      <TextInput
-        style={styles.textInput}
-        placeholder="E.g. Coffee"
-        value={newItem}
-        onChangeText={setNewItem}
-        returnKeyType="done"
-        onSubmitEditing={handleAddItem}
-      />
-      {shoppingList.map((item) => (
-        <ListItem
-          key={item.id}
-          itemName={item.itemName}
-          isCompleted={item.isCompleted}
+      ListEmptyComponent={
+        <View style={styles.emptyListContainer}>
+          <Text>Your shopping list is empty!</Text>
+        </View>
+      }
+      ListHeaderComponent={
+        <TextInput
+          style={styles.textInput}
+          placeholder="E.g. Coffee"
+          value={newItem}
+          onChangeText={setNewItem}
+          returnKeyType="done"
+          onSubmitEditing={handleAddItem}
         />
-      ))}
-      <StatusBar style="auto" />
-    </ScrollView>
+      }
+      data={shoppingList}
+      renderItem={({ item }) => {
+        return (
+          <ListItem itemName={item.itemName} isCompleted={item.isCompleted} />
+        );
+      }}
+      stickyHeaderIndices={[0]}
+    />
   );
 }
 
@@ -87,5 +73,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginHorizontal: 10,
     padding: 10,
+  },
+  emptyListContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
   },
 });

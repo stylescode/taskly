@@ -2,7 +2,10 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, TextInput, View, FlatList } from "react-native";
 import { ListItem } from "../components/ListItem";
 import { theme } from "../theme";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getFromStorage, saveToStorage } from "../utils/storage";
+
+const storageKey = "shoppingList";
 
 type ShoppingListItemType = {
   id: number;
@@ -14,6 +17,16 @@ export default function App() {
   const [newItem, setNewItem] = useState("");
   const [shoppingList, setShoppingList] = useState<ShoppingListItemType[]>([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getFromStorage(storageKey);
+      if (data) {
+        setShoppingList(data);
+      }
+    }
+    fetchData();
+  }, []);
+
   const handleAddItem = () => {
     if (newItem.length > 0) {
       const newShoppingList = [
@@ -21,6 +34,7 @@ export default function App() {
         { id: Date.now(), itemName: newItem, isCompleted: false },
       ];
       setShoppingList(newShoppingList);
+      saveToStorage(storageKey, newShoppingList);
       setNewItem("");
     }
   };
@@ -28,6 +42,7 @@ export default function App() {
   const handleDelete = (id: number) => {
     const newShoppingList = shoppingList.filter((item) => item.id !== id);
     setShoppingList(newShoppingList);
+    saveToStorage(storageKey, newShoppingList);
   };
 
   const handleToggleComplete = (id: number) => {
@@ -39,6 +54,7 @@ export default function App() {
       }
     });
     setShoppingList(newShoppingList);
+    saveToStorage(storageKey, newShoppingList);
   };
 
   const sortList = (list: ShoppingListItemType[]) => {

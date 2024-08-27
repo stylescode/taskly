@@ -4,6 +4,7 @@ import { ListItem } from "../components/ListItem";
 import { theme } from "../theme";
 import { useState, useEffect } from "react";
 import { getFromStorage, saveToStorage } from "../utils/storage";
+import * as Haptics from "expo-haptics";
 
 const storageKey = "shoppingList";
 
@@ -41,6 +42,7 @@ export default function App() {
 
   const handleDelete = (id: number) => {
     const newShoppingList = shoppingList.filter((item) => item.id !== id);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setShoppingList(newShoppingList);
     saveToStorage(storageKey, newShoppingList);
   };
@@ -54,6 +56,7 @@ export default function App() {
       }
     });
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setShoppingList(newShoppingList);
     saveToStorage(storageKey, newShoppingList);
   };

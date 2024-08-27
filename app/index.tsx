@@ -1,5 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, TextInput, View, FlatList, LayoutAnimation } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  FlatList,
+  LayoutAnimation,
+} from "react-native";
 import { ListItem } from "../components/ListItem";
 import { theme } from "../theme";
 import { useState, useEffect } from "react";
@@ -24,7 +31,7 @@ export default function App() {
       if (data) {
         setShoppingList(data);
       }
-    }
+    };
     fetchData();
   }, []);
 

@@ -1,4 +1,11 @@
-import { Alert, StyleSheet, Text, View, TouchableOpacity, Pressable } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import { theme } from "../theme";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
@@ -9,7 +16,12 @@ type Props = {
   toggleComplete: () => void;
 };
 
-export const ListItem = ({ itemName, isCompleted, deleteItem, toggleComplete }: Props) => {
+export const ListItem = ({
+  itemName,
+  isCompleted,
+  deleteItem,
+  toggleComplete,
+}: Props) => {
   const handleDelete = () => {
     Alert.alert(`Are you sure you want to delete ${itemName}?`, "", [
       {

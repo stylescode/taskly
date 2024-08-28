@@ -1,14 +1,23 @@
-import { Text, TouchableOpacity, View, StyleSheet, Alert } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  Alert,
+  Dimensions,
+} from "react-native";
 import { registerForPushNotifications } from "../../utils/registerForPushNotifications";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Duration, isBefore, intervalToDuration } from "date-fns";
 import { TimeSegment } from "../../components/TimeSegment";
 import { getFromStorage, saveToStorage } from "../../utils/storage";
 import { theme } from "../../theme";
+import * as Haptics from "expo-haptics";
+import ConfettiCannon from "react-native-confetti-cannon";
 
-const frequency = 10 * 1000;
+const frequency = 24 * 60 * 60 * 1000;
 
 export const countdownStorageKey = "tasklyCountdown";
 
@@ -23,6 +32,7 @@ type CountdownStatus = {
 };
 
 export default function CounterScreen() {
+  const confettiRef = useRef<any>(null);
   const [countdownState, setCountdownState] =
     useState<PersistedCountdownState>();
   const [countdownStatus, setCountdownStatus] = useState<CountdownStatus>({
@@ -57,6 +67,8 @@ export default function CounterScreen() {
   }, [lastCompletedTimestamp]);
 
   const scheduleNotification = async () => {
+    confettiRef?.current?.start();
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     let pushNotificationId;
     const result = await registerForPushNotifications();
     if (result === "granted") {
@@ -129,6 +141,13 @@ export default function CounterScreen() {
       <TouchableOpacity style={styles.button} onPress={scheduleNotification}>
         <Text style={styles.buttonText}>I'VE DONE THE THING!</Text>
       </TouchableOpacity>
+      <ConfettiCannon
+        ref={confettiRef}
+        count={50}
+        origin={{ x: Dimensions.get("window").width / 2, y: -20 }}
+        fadeOut
+        autoStart={false}
+      />
     </View>
   );
 }

@@ -5,8 +5,17 @@ import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
 import { Duration, isBefore, intervalToDuration } from "date-fns";
 import { TimeSegment } from "../../components/TimeSegment";
+import { getFromStorage, saveToStorage } from "../../utils/storage";
+import { theme } from "../../theme";
 
-const timestamp = Date.now() + 10 * 1000;
+const frequency = 10 * 1000;
+
+export const countdownStorageKey = "tasklyCountdown";
+
+export type PersistedCountdownState = {
+  currentNotificationId: string | undefined;
+  completedAtTimestamps: number[];
+};
 
 type CountdownStatus = {
   isOverdue: boolean;
@@ -14,15 +23,28 @@ type CountdownStatus = {
 };
 
 export default function CounterScreen() {
+  const [countdownState, setCountdownState] =
+    useState<PersistedCountdownState>();
   const [countdownStatus, setCountdownStatus] = useState<CountdownStatus>({
     isOverdue: false,
     distance: {},
   });
 
-  console.log(countdownStatus);
+  const lastCompletedTimestamp = countdownState?.completedAtTimestamps[0];
+
+  useEffect(() => {
+    const init = async () => {
+      const value = await getFromStorage(countdownStorageKey);
+      setCountdownState(value);
+    };
+    init();
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
+      const timestamp = lastCompletedTimestamp
+        ? lastCompletedTimestamp + frequency
+        : Date.now();
       const isOverdue = isBefore(timestamp, Date.now());
       const distance = intervalToDuration(
         isOverdue
@@ -32,20 +54,19 @@ export default function CounterScreen() {
       setCountdownStatus({ isOverdue, distance });
     }, 1000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [lastCompletedTimestamp]);
 
   const scheduleNotification = async () => {
+    let pushNotificationId;
     const result = await registerForPushNotifications();
     if (result === "granted") {
-      await Notifications.scheduleNotificationAsync({
+      pushNotificationId = await Notifications.scheduleNotificationAsync({
         content: {
           title: "Taskly Reminder",
-          body: "Make sure your list up to date!",
+          body: "Countdown has reached 0!",
         },
         trigger: {
-          hour: 9,
-          minute: 0,
-          repeats: true,
+          seconds: frequency / 1000,
         },
       });
     } else {
@@ -55,6 +76,20 @@ export default function CounterScreen() {
           "Enable notifications in settings",
         );
     }
+    if (countdownState?.currentNotificationId) {
+      await Notifications.cancelScheduledNotificationAsync(
+        countdownState.currentNotificationId,
+      );
+    }
+
+    const newCountdownState: PersistedCountdownState = {
+      currentNotificationId: pushNotificationId,
+      completedAtTimestamps: countdownState
+        ? [Date.now(), ...countdownState.completedAtTimestamps]
+        : [Date.now()],
+    };
+    setCountdownState(newCountdownState);
+    await saveToStorage(countdownStorageKey, newCountdownState);
   };
 
   return (
@@ -103,16 +138,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: theme.colorWhite,
   },
   button: {
-    backgroundColor: "black",
+    backgroundColor: theme.colorBlack,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 6,
   },
   buttonText: {
-    color: "white",
+    color: theme.colorWhite,
     fontSize: 16,
     letterSpacing: 1,
   },
@@ -128,9 +163,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   late: {
-    backgroundColor: "red",
+    backgroundColor: theme.colorRed,
   },
   whiteText: {
-    color: "white",
+    color: theme.colorWhite,
   },
 });

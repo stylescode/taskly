@@ -25,7 +25,7 @@ export default function Layout() {
           title: "Counter",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome6 name="plus" size={size} color={color} />
+            <FontAwesome6 name="clock" size={size} color={color} />
           ),
         }}
       />
